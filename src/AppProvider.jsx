@@ -46,10 +46,10 @@ export const AppProvider = ({ children }) => {
     console.log(`bottom: ${bottom}`);
     console.log(`right: ${right}`);
     setSegments([
-      { id: 1, type: 'line', points: [{x: left, y: top}, {x: right, y: top}] },
-      { id: 2, type: 'bezier', points: [{x: right, y: top}, {x: right, y: nearTop}, {x: right, y: nearBottom}, {x: right, y: bottom}] },
-      { id: 3, type: 'line', points: [{x: right, y: bottom}, {x: left, y: bottom}] },
-      { id: 4, type: 'tension', tension: 0.5, points: [{x: left, y: bottom}, {x: left, y: (top + bottom) / 2}, {x: left, y: top}] },
+      { id: 1, type: 'line', location: 'top', points: [{x: left, y: top}, {x: right, y: top}] },
+      { id: 2, type: 'bezier', location: 'right', points: [{x: right, y: top}, {x: right, y: nearTop}, {x: right, y: nearBottom}, {x: right, y: bottom}] },
+      { id: 3, type: 'line', location: 'bottom', points: [{x: right, y: bottom}, {x: left, y: bottom}] },
+      { id: 4, type: 'tension', location: 'left', tension: 0.5, points: [{x: left, y: bottom}, {x: left, y: (top + bottom) / 2}, {x: left, y: top}] },
     ]);
     setNextSegmentId(nextSegmentId);
 
