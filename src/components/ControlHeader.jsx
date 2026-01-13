@@ -1,16 +1,27 @@
-import { useState, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useApp } from '../AppProvider';
 import { Listbox, ListboxButton, ListboxOptions, Field, Label, Textarea } from '@headlessui/react';
 import { Image as ImageIcon, Type, Settings2, Download, Upload, FileText } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
 
 const ControlHeader = () => {
   const [file, setFile] = useState(null);
+  const { imageUrl, setImageUrl } = useApp();
 
-  const onDrop = (acceptedFiles) => {
+  const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles[0]) {
-      setFile(acceptedFiles[0]);
+      const url = URL.createObjectURL(acceptedFiles[0]);
+      console.log(`acceptedFiles[0]: ${acceptedFiles[0]}`);
+      console.log(`image url: ${url}`);
+      setImageUrl(url);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (imageUrl) URL.revokeObjectURL(imageUrl);
+    };
+  }, [imageUrl]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

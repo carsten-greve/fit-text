@@ -1,9 +1,10 @@
 import { useApp } from '../AppProvider';
 import { Stage, Layer, Circle, Line, Text } from 'react-konva';
 import { produce } from 'immer'
+import { BackgroundImage } from './BackgroundImage';
 
 const FitArea = () => {
-  const { stageSize, sceneSize, konvaRef, segments, setSegments } = useApp();
+  const { stageSize, sceneSize, konvaRef, segments, setSegments, imageUrl } = useApp();
 
   const isTopLine = (segment) => segment.id === 1;
   const isBottomLine = (segment) => segment.id === 3;
@@ -96,6 +97,7 @@ const FitArea = () => {
         <div className="absolute inset-0" ref={konvaRef}>
           <Stage width={stageSize.width} height={stageSize.height} scaleX={stageSize.scale} scaleY={stageSize.scale}>
             <Layer>
+              {imageUrl && <BackgroundImage url={imageUrl} stageSize={stageSize} />}
               <Text text={`sceneSize.width: ${sceneSize.width}`} x={0} y={0}></Text>
               <Text text={`sceneSize.height: ${sceneSize.height}`} x={0} y={20}></Text>
               <Text text={`stageSize.width: ${stageSize.width}`} x={0} y={40}></Text>
@@ -122,7 +124,7 @@ const FitArea = () => {
                     key={`guide-${segment.id}`}
                     stroke="black"
                     strokeWidth={1}
-                    dash={[5, 5]}
+                    dash={[10, 10, 2, 10]}
                     opacity={0.5}
                     points={segment.points.flatMap(p => [p.x, p.y])}
                   />

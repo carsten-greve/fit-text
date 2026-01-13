@@ -8,6 +8,7 @@ export const AppProvider = ({ children }) => {
   const konvaRef = useRef(null);
   const [segments, setSegments] = useState([]);
   const [nextSegmentId, setNextSegmentId] = useState(5);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const sceneSizeRef = useRef();
   sceneSizeRef.current = sceneSize;
@@ -69,6 +70,8 @@ export const AppProvider = ({ children }) => {
       setSegments,
       nextSegmentId,
       setNextSegmentId,
+      imageUrl,
+      setImageUrl,
     }}>
       {children}
     </AppContext.Provider>
