@@ -9,6 +9,7 @@ export const AppProvider = ({ children }) => {
   const [segments, setSegments] = useState([]);
   const [nextSegmentId, setNextSegmentId] = useState(5);
   const [imageUrl, setImageUrl] = useState(null);
+  const [selectedSegmentId, setSelectedSegmentId] = useState(0);
 
   const sceneSizeRef = useRef();
   sceneSizeRef.current = sceneSize;
@@ -72,6 +73,8 @@ export const AppProvider = ({ children }) => {
       setNextSegmentId,
       imageUrl,
       setImageUrl,
+      selectedSegmentId,
+      setSelectedSegmentId,
     }}>
       {children}
     </AppContext.Provider>
