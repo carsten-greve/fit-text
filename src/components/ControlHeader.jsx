@@ -3,6 +3,7 @@ import { useApp } from '../AppProvider';
 import { Listbox, ListboxButton, ListboxOptions, Field, Label, Textarea } from '@headlessui/react';
 import { Image as ImageIcon, Type, Settings2, Download, Upload, FileText } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
+import { SegmentControls } from './SegmentControls';
 
 const ControlHeader = () => {
   const [file, setFile] = useState(null);
@@ -10,6 +11,7 @@ const ControlHeader = () => {
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles[0]) {
+      setFile(acceptedFiles[0]);
       const url = URL.createObjectURL(acceptedFiles[0]);
       console.log(`acceptedFiles[0]: ${acceptedFiles[0]}`);
       console.log(`image url: ${url}`);
@@ -44,14 +46,7 @@ const ControlHeader = () => {
         </p>
       </div>
 
-      {/* Node/Segment Controls */}
-      <div className="flex flex-col gap-1 border-l pl-4">
-        <span className="text-[10px] font-bold uppercase text-gray-500">Selected Segment</span>
-        <div className="flex gap-2">
-          <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">Straight</button>
-          <button className="px-3 py-1 bg-gray-100 text-gray-600 rounded text-xs font-medium">Spline</button>
-        </div>
-      </div>
+      <SegmentControls />
 
       {/* Text Input Area */}
       <div className="flex-1 min-w-50 h-full p-2">
