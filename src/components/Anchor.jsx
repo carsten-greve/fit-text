@@ -1,6 +1,7 @@
 import { useApp } from '../AppProvider';
 import { Circle } from 'react-konva';
 import { produce } from 'immer'
+import { getNearestSegments } from './SegmentControls';
 
 export const Anchor = ({ anchor }) => {
   const { segments, setSegments, sceneSize } = useApp();
@@ -8,7 +9,7 @@ export const Anchor = ({ anchor }) => {
   const isTopOrBottomLine = (segment) => [1, 3].includes(segment.id);
 
   const handleDragMove = (anchor, newPosition) => {
-    const segmentIndex = anchor.startSegmentIndex;
+    const { segmentIndex } = getNearestSegments(segments, anchor.startSegmentId);
     const pointIndex = anchor.pointIndex;
 
     let minX = 10;

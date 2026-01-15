@@ -1,13 +1,13 @@
 import { useApp } from '../AppProvider';
 import { produce } from 'immer'
 
-const getNearestSegments = (segments, segmentId) => {
-  const selectedSegmentIndex = segments.findIndex(segment => segment.id === segmentId);
-  const selectedSegment = segments[selectedSegmentIndex];
-  const nextSegment = segments[(selectedSegmentIndex + 1) % segments.length];
-  const prevSegment = segments.at(selectedSegmentIndex - 1);
+export const getNearestSegments = (segments, segmentId) => {
+  const segmentIndex = segments.findIndex(segment => segment.id === segmentId);
+  const segment = segments[segmentIndex];
+  const nextSegment = segments[(segmentIndex + 1) % segments.length];
+  const prevSegment = segments.at(segmentIndex - 1);
 
-  return { selectedSegmentIndex, selectedSegment, nextSegment, prevSegment };
+  return { segmentIndex, segment, nextSegment, prevSegment };
 }
 
 const getQuotientPoint = (p1, p2, dividend, divisor) => {
@@ -22,7 +22,7 @@ export const SegmentControls = () => {
 
   const isTopOrBottomLine = (segment) => [1, 3].includes(segment.id);
 
-  const { selectedSegment, nextSegment, prevSegment } = getNearestSegments(segments, selectedSegmentId);
+  const { segment: selectedSegment, nextSegment, prevSegment } = getNearestSegments(segments, selectedSegmentId);
   const isLine = selectedSegment && selectedSegment.type === 'line';
   const isBezier = selectedSegment && selectedSegment.type === 'bezier';
   const isTension = selectedSegment && selectedSegment.type === 'tension';
@@ -35,7 +35,7 @@ export const SegmentControls = () => {
   const handleTensionChange = (e) => {
     setSegments(
       produce(segments, draft => {
-        const { selectedSegment } = getNearestSegments(draft, selectedSegmentId);
+        const { segment: selectedSegment } = getNearestSegments(draft, selectedSegmentId);
         if (!selectedSegment) return;
 
         const newTension = parseFloat(e.target.value);
@@ -47,7 +47,7 @@ export const SegmentControls = () => {
   const handleSplitClick = () => {
     setSegments(
       produce(segments, draft => {
-        const { selectedSegmentIndex, selectedSegment } = getNearestSegments(draft, selectedSegmentId);
+        const { segmentIndex: selectedSegmentIndex, segment: selectedSegment } = getNearestSegments(draft, selectedSegmentId);
         if (!selectedSegment) return;
 
         const pStart = selectedSegment.points.at(0);
@@ -96,7 +96,7 @@ export const SegmentControls = () => {
   const handleTypeClick = (newSegmentType) => {
     setSegments(
       produce(segments, draft => {
-        const { selectedSegment } = getNearestSegments(draft, selectedSegmentId);
+        const { segment: selectedSegment } = getNearestSegments(draft, selectedSegmentId);
         if (!selectedSegment ||
             selectedSegment.type === newSegmentType ||
             isTopOrBottomLine(selectedSegment)) {
@@ -134,7 +134,7 @@ export const SegmentControls = () => {
   const handleDeleteClick = () => {
     setSegments(
       produce(segments, draft => {
-        const { selectedSegmentIndex, nextSegment, prevSegment } = getNearestSegments(draft, selectedSegmentId);
+        const { segmentIndex: selectedSegmentIndex, nextSegment, prevSegment } = getNearestSegments(draft, selectedSegmentId);
 
         if (isTopOrBottomLine(nextSegment)) {
           prevSegment.points.splice(-1, 1, nextSegment.points[0]);

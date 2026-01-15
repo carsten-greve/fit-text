@@ -17,10 +17,9 @@ const FitArea = () => {
   let anchors = produce(segments, draft => {
     let prevSegment = draft.at(-1);
 
-    return draft.flatMap((segment, segmentIndex) => {
+    return draft.flatMap(segment => {
       const newAnchorsInSegment = [{
         startSegmentId: segment.id,
-        startSegmentIndex: segmentIndex,
         point: segment.points[0],
         pointIndex: 0,
         types: [prevSegment.type, segment.type],
@@ -30,7 +29,6 @@ const FitArea = () => {
       }].concat(segment.points.slice(1, -1).map((point, pointIndex) => {
         return {
           startSegmentId: segment.id,
-          startSegmentIndex: segmentIndex,
           point,
           pointIndex: 1 + pointIndex,
           types: [segment.type],
