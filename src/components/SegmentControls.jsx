@@ -1,14 +1,7 @@
 import { useApp } from '../AppProvider';
 import { produce } from 'immer'
-
-export const getNearestSegments = (segments, segmentId) => {
-  const segmentIndex = segments.findIndex(segment => segment.id === segmentId);
-  const segment = segments[segmentIndex];
-  const nextSegment = segments[(segmentIndex + 1) % segments.length];
-  const prevSegment = segments.at(segmentIndex - 1);
-
-  return { segmentIndex, segment, nextSegment, prevSegment };
-}
+import { getNearestSegments } from '../utilities/getNearestSegments';
+import { isTopOrBottomLine } from '../utilities/topBottom';
 
 const getQuotientPoint = (p1, p2, dividend, divisor) => {
   return {
@@ -19,8 +12,6 @@ const getQuotientPoint = (p1, p2, dividend, divisor) => {
 
 export const SegmentControls = () => {
   const { selectedSegmentId, segments, setSegments, nextSegmentId, setNextSegmentId } = useApp();
-
-  const isTopOrBottomLine = (segment) => [1, 3].includes(segment.id);
 
   const { segment: selectedSegment, nextSegment, prevSegment } = getNearestSegments(segments, selectedSegmentId);
   const isLine = selectedSegment && selectedSegment.type === 'line';

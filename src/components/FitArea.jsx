@@ -1,47 +1,16 @@
 import { Fragment } from 'react';
 import { useApp } from '../AppProvider';
 import { Stage, Layer, Text } from 'react-konva';
-import { produce } from 'immer'
 import { BackgroundImage } from './BackgroundImage';
 import { Segment } from './Segment';
 import { ControlPolygon } from './ControlPolygon';
 import { Anchor } from './Anchor';
+import { getAnchors } from '../utilities/getAnchors';
 
 const FitArea = () => {
   const { stageSize, sceneSize, konvaRef, segments, setSegments, imageUrl, setSelectedSegmentId } = useApp();
 
-  const isTopLine = (segment) => segment.id === 1;
-  const isBottomLine = (segment) => segment.id === 3;
-  const isTopOrBottomLine = (segment) => isTopLine(segment) || isBottomLine(segment);
-
-  let anchors = produce(segments, draft => {
-    let prevSegment = draft.at(-1);
-
-    return draft.flatMap(segment => {
-      const newAnchorsInSegment = [{
-        startSegmentId: segment.id,
-        point: segment.points[0],
-        pointIndex: 0,
-        types: [prevSegment.type, segment.type],
-        isOnTopOrBottomLine: isTopOrBottomLine(prevSegment) || isTopOrBottomLine(segment),
-        isEndPoint: true,
-        location: isTopOrBottomLine(segment) ? (isTopLine(segment) ? 'left' : 'right') : segment.location,
-      }].concat(segment.points.slice(1, -1).map((point, pointIndex) => {
-        return {
-          startSegmentId: segment.id,
-          point,
-          pointIndex: 1 + pointIndex,
-          types: [segment.type],
-          isOnTopOrBottomLine: false,
-          isEndPoint: false,
-          location: segment.location,
-        }
-      }));
-      prevSegment = segment;
-
-      return newAnchorsInSegment;
-    });
-  });
+  const anchors = getAnchors(segments);
 
   // Anchor coordinates, that are not on the two horizontal lines.
   let nonHorizontalAnchors = anchors.filter(anchor => !anchor.isOnTopOrBottomLine);
