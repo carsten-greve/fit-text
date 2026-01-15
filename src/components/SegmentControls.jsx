@@ -131,6 +131,22 @@ export const SegmentControls = () => {
     ));
   }
 
+  const handleDeleteClick = () => {
+    setSegments(
+      produce(segments, draft => {
+        const { selectedSegmentIndex, nextSegment, prevSegment } = getNearestSegments(draft, selectedSegmentId);
+
+        if (isTopOrBottomLine(nextSegment)) {
+          prevSegment.points.splice(-1, 1, nextSegment.points[0]);
+        }
+        else {
+          nextSegment.points.splice(0, 1, prevSegment.points.at(-1));
+        }
+        draft.splice(selectedSegmentIndex, 1);
+      }
+    ));
+  }
+
   const buttonClass = "px-3 py-1 rounded text-xs font-medium";
   const activeClass = " bg-blue-100 text-blue-700";
   const inactiveClass = " bg-gray-100 text-gray-600";
@@ -143,15 +159,9 @@ export const SegmentControls = () => {
       ? activeButtonClass
       : inactiveButtonHoverClass
     : inactiveButtonClass;
-  const bezierLineButtonClass = selectedSegment 
-    ? isBezier
-      ? activeButtonClass
-      : isTopOrBottomLine(selectedSegment)
-        ? inactiveButtonClass
-        : inactiveButtonHoverClass
-    : inactiveButtonClass;
-  const tensionLineButtonClass = selectedSegment 
-    ? isTension
+  const nonLineButtonClass = (isType) =>
+    selectedSegment
+    ? isType
       ? activeButtonClass
       : isTopOrBottomLine(selectedSegment)
         ? inactiveButtonClass
@@ -167,11 +177,11 @@ export const SegmentControls = () => {
         >Line</button>
         <button
           onClick={() => handleTypeClick('bezier')}
-          className={bezierLineButtonClass}
+          className={nonLineButtonClass(isBezier)}
         >Bezier</button>
         <button
           onClick={() => handleTypeClick('tension')}
-          className={tensionLineButtonClass}
+          className={nonLineButtonClass(isTension)}
         >Tension</button>
       </div>
       <div className="flex flex-col gap-2 w-20">
@@ -186,7 +196,10 @@ export const SegmentControls = () => {
           onClick={handleSplitClick}
           className={activeButtonClass}
         >Split</button>}
-        {canDelete && <button className={activeButtonClass}>Delete</button>}
+        {canDelete && <button
+          onClick={handleDeleteClick}
+          className={activeButtonClass}
+        >Delete</button>}
         {isTension && <input
           type="number"
           min="0"
