@@ -5,7 +5,7 @@ const getNearestSegments = (segments, segmentId) => {
   const selectedSegmentIndex = segments.findIndex(segment => segment.id === segmentId);
   const selectedSegment = segments[selectedSegmentIndex];
   const nextSegment = segments[(selectedSegmentIndex + 1) % segments.length];
-  const prevSegment = segments[(segments.length + selectedSegmentIndex - 1) % segments.length];
+  const prevSegment = segments.at(selectedSegmentIndex - 1);
 
   return { selectedSegmentIndex, selectedSegment, nextSegment, prevSegment };
 }
@@ -32,10 +32,6 @@ export const SegmentControls = () => {
     !(isTopOrBottomLine(prevSegment) && isTopOrBottomLine(nextSegment));
   const canSplit = selectedSegment && !isTopOrBottomLine(selectedSegment);
 
-  const classNameButton = "px-3 py-1 rounded text-xs font-medium";
-  const classNameActive = classNameButton + " bg-blue-100 text-blue-700";
-  const classNameInActive = classNameButton + " bg-gray-100 text-gray-600";
-
   const handleTensionChange = (e) => {
     setSegments(
       produce(segments, draft => {
@@ -51,7 +47,7 @@ export const SegmentControls = () => {
   const handleSplitClick = () => {
     setSegments(
       produce(segments, draft => {
-        const { selectedSegmentIndex, selectedSegment, nextSegment, prevSegment } = getNearestSegments(draft, selectedSegmentId);
+        const { selectedSegmentIndex, selectedSegment } = getNearestSegments(draft, selectedSegmentId);
         if (!selectedSegment) return;
 
         const pStart = selectedSegment.points.at(0);
@@ -71,11 +67,20 @@ export const SegmentControls = () => {
             break;
           }
 
-          case 'tension':
+          case 'tension': {
+            newSegment.tension = selectedSegment.tension;
+            const pMid = getQuotientPoint(pStart, pEnd, 1, 2);
+            newSegment.points = [pMid, getQuotientPoint(pMid, pEnd, 1, 2), pEnd];
+            selectedSegment.points = [pStart, getQuotientPoint(pStart, pMid, 1, 2), pMid];
             break;
+          }
 
-            case 'line':
+          case 'bezier': {
+            const pMid = getQuotientPoint(pStart, pEnd, 1, 2);
+            newSegment.points = [pMid, getQuotientPoint(pMid, pEnd, 1, 3), getQuotientPoint(pMid, pEnd, 2, 3), pEnd];
+            selectedSegment.points = [pStart, getQuotientPoint(pStart, pMid, 1, 3), getQuotientPoint(pStart, pMid, 2, 3), pMid];
             break;
+          }
 
           default:
             return;
@@ -88,12 +93,86 @@ export const SegmentControls = () => {
     setNextSegmentId(1 + nextSegmentId);
   }
 
-  return (
+  const handleTypeClick = (newSegmentType) => {
+    setSegments(
+      produce(segments, draft => {
+        const { selectedSegment } = getNearestSegments(draft, selectedSegmentId);
+        if (!selectedSegment ||
+            selectedSegment.type === newSegmentType ||
+            isTopOrBottomLine(selectedSegment)) {
+          return;
+        }
+
+        const pStart = selectedSegment.points.at(0);
+        const pEnd = selectedSegment.points.at(-1);
+        selectedSegment.type = newSegmentType;
+
+        switch (newSegmentType) {
+          case 'line': {
+            selectedSegment.points = [pStart, pEnd];
+            break;
+          }
+
+          case 'tension': {
+            selectedSegment.tension ??= 0.5;
+            selectedSegment.points = [pStart, getQuotientPoint(pStart, pEnd, 1, 2), pEnd];
+            break;
+          }
+
+          case 'bezier': {
+            selectedSegment.points = [pStart, getQuotientPoint(pStart, pEnd, 1, 3), getQuotientPoint(pStart, pEnd, 2, 3), pEnd];
+            break;
+          }
+
+          default:
+            return;
+        }
+      }
+    ));
+  }
+
+  const buttonClass = "px-3 py-1 rounded text-xs font-medium";
+  const activeClass = " bg-blue-100 text-blue-700";
+  const inactiveClass = " bg-gray-100 text-gray-600";
+  const activeButtonClass = buttonClass + activeClass +  " border-blue-100 border-1"
+  const inactiveButtonClass = buttonClass + inactiveClass + " border-gray-100 border-1"
+  const inactiveButtonHoverClass = buttonClass + inactiveClass + " border-blue-700 border-1 hover:bg-blue-100"
+
+  const lineButtonClass = selectedSegment 
+    ? isLine
+      ? activeButtonClass
+      : inactiveButtonHoverClass
+    : inactiveButtonClass;
+  const bezierLineButtonClass = selectedSegment 
+    ? isBezier
+      ? activeButtonClass
+      : isTopOrBottomLine(selectedSegment)
+        ? inactiveButtonClass
+        : inactiveButtonHoverClass
+    : inactiveButtonClass;
+  const tensionLineButtonClass = selectedSegment 
+    ? isTension
+      ? activeButtonClass
+      : isTopOrBottomLine(selectedSegment)
+        ? inactiveButtonClass
+        : inactiveButtonHoverClass
+    : inactiveButtonClass;
+
+    return (
     <div className="flex flex-row gap-3 border-l pl-4">
       <div className="flex flex-col gap-2">
-        <button className={isLine ? classNameActive : classNameInActive}>Line</button>
-        <button className={isBezier ? classNameActive : classNameInActive}>Bezier</button>
-        <button className={isTension ? classNameActive : classNameInActive}>Tension</button>
+        <button
+          onClick={() => handleTypeClick('line')}
+          className={lineButtonClass}
+        >Line</button>
+        <button
+          onClick={() => handleTypeClick('bezier')}
+          className={bezierLineButtonClass}
+        >Bezier</button>
+        <button
+          onClick={() => handleTypeClick('tension')}
+          className={tensionLineButtonClass}
+        >Tension</button>
       </div>
       <div className="flex flex-col gap-2 w-20">
         {!selectedSegment &&
@@ -103,11 +182,11 @@ export const SegmentControls = () => {
             <span className="text-center px-3 py-1 text-xs font-medium uppercase text-gray-500">Segment</span>
           </>
         }
-        {canDelete && <button className={classNameActive}>Delete</button>}
         {canSplit && <button
           onClick={handleSplitClick}
-          className={classNameActive}
+          className={activeButtonClass}
         >Split</button>}
+        {canDelete && <button className={activeButtonClass}>Delete</button>}
         {isTension && <input
           type="number"
           min="0"
@@ -115,7 +194,7 @@ export const SegmentControls = () => {
           value={100 * selectedSegment.tension}
           onChange={handleTensionChange}
           step="10"
-          className={classNameActive}
+          className={activeButtonClass}
         />}
       </div>
     </div>

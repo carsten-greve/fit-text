@@ -29,20 +29,19 @@ export const Anchor = ({ anchor }) => {
     setSegments(
       produce(segments, draft => {
         const nextSegment = draft[segmentIndex];
-        const prevSegment = draft[(draft.length + segmentIndex - 1) % draft.length];
+        const prevSegment = draft.at(segmentIndex - 1);
 
         nextSegment.points[pointIndex] = newPosition;
         if (pointIndex === 0) {
-          const prevSegmentPoints = prevSegment.points;
-          prevSegmentPoints[prevSegmentPoints.length - 1] = newPosition;
+          prevSegment.points = prevSegment.points.with(-1, newPosition);
         }
         if (isTopOrBottomLine(nextSegment)) {
           const nextNextSegment = draft[(segmentIndex + 1) % draft.length];
           nextSegment.points[1].y = nextNextSegment.points[0].y = newPosition.y;
         }
         if (isTopOrBottomLine(prevSegment) && pointIndex === 0) {
-          const prevPrevSegment = draft[(draft.length + segmentIndex - 2) % draft.length];
-          prevSegment.points[0].y = prevPrevSegment.points[prevPrevSegment.points.length - 1].y = newPosition.y;
+          const prevPrevSegment = draft.at(segmentIndex - 2);
+          prevSegment.points[0].y = prevPrevSegment.points.at(-1).y = newPosition.y;
         }
       }
     ));

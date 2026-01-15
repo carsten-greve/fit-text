@@ -15,7 +15,7 @@ const FitArea = () => {
   const isTopOrBottomLine = (segment) => isTopLine(segment) || isBottomLine(segment);
 
   let anchors = produce(segments, draft => {
-    let prevSegment = draft[draft.length - 1];
+    let prevSegment = draft.at(-1);
 
     return draft.flatMap((segment, segmentIndex) => {
       const newAnchorsInSegment = [{
