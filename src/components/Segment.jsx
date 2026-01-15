@@ -8,7 +8,7 @@ export const Segment = ({ segment }) => {
 
   return (
     <Line
-      stroke="black"
+      stroke={["top", "bottom"].includes(segment.location) ? "green" : "black"}
       strokeWidth={selectedSegmentId === segment.id ? 4 : 2}
       points={segment.points.flatMap(p => [p.x, p.y])}
       bezier={segment.type === 'bezier'}
