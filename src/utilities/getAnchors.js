@@ -29,6 +29,6 @@ export const getAnchors = segments => {
   });
 };
 
-export const getAnchorEqualityFuntion = (startSegmentId, pointIndex) => {
+export const getAnchorEqualityFunction = (startSegmentId, pointIndex) => {
   return anchor => anchor.startSegmentId === startSegmentId && anchor.pointIndex === pointIndex;
 }

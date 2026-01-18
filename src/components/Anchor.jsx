@@ -3,7 +3,7 @@ import { Circle } from 'react-konva';
 import { produce } from 'immer'
 import { getNearestSegments } from '../utilities/getNearestSegments';
 import { isTopOrBottomLine } from '../utilities/topBottom';
-import { getAnchors, getAnchorEqualityFuntion } from '../utilities/getAnchors';
+import { getAnchors, getAnchorEqualityFunction } from '../utilities/getAnchors';
 
 export const Anchor = ({ anchor }) => {
   const { segments, setSegments, sceneSize } = useApp();
@@ -20,7 +20,7 @@ export const Anchor = ({ anchor }) => {
       for (const [location, value] of Object.entries(sortedAnchors)) {
         const locationAnchors = allAnchors.filter(anchor => anchor.location === location).sort((a, b) => a.point.y - b.point.y);
         value['anchors'] = locationAnchors;
-        value['index'] = locationAnchors.findIndex(getAnchorEqualityFuntion(anchor.startSegmentId, anchor.pointIndex));
+        value['index'] = locationAnchors.findIndex(getAnchorEqualityFunction(anchor.startSegmentId, anchor.pointIndex));
       }
 
       if (anchor.isOnTopOrBottomLine) {
