@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useRef, useEffect } from 'react';
+import { getTextArea } from './utilities/getTextArea';
 
 const AppContext = createContext();
 
@@ -10,6 +11,7 @@ export const AppProvider = ({ children }) => {
   const [nextSegmentId, setNextSegmentId] = useState(5);
   const [imageUrl, setImageUrl] = useState(null);
   const [selectedSegmentId, setSelectedSegmentId] = useState(0);
+  const [textArea, setTextArea] = useState(getTextArea([], 1));
 
   const sceneSizeRef = useRef();
   sceneSizeRef.current = sceneSize;
@@ -39,8 +41,6 @@ export const AppProvider = ({ children }) => {
     const left = width / 4;
     const bottom = height - top;
     const right = width - left;
-    const nearTop = (2 * top + bottom) / 3;
-    const nearBottom = (top + 2 * bottom) / 3;
     console.log(`width: ${width}`);
     console.log(`height: ${height}`);
     console.log(`top: ${top}`);
@@ -62,6 +62,10 @@ export const AppProvider = ({ children }) => {
     };
   }, []);
 
+  useEffect(() => {
+    setTextArea(getTextArea(segments, 100));
+  }, [segments]);
+
   return (
     <AppContext.Provider value={{
       sceneSize,
@@ -75,6 +79,7 @@ export const AppProvider = ({ children }) => {
       setImageUrl,
       selectedSegmentId,
       setSelectedSegmentId,
+      textArea,
     }}>
       {children}
     </AppContext.Provider>

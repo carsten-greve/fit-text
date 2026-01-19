@@ -170,16 +170,16 @@ export const SegmentControls = () => {
           onClick={() => handleTypeClick('bezier')}
           className={nonLineButtonClass(isBezier)}
         >Bezier</button>
-        <button
+        {false && <button
           onClick={() => handleTypeClick('tension')}
           className={nonLineButtonClass(isTension)}
-        >Tension</button>
+        >Tension</button>}
       </div>
       <div className="flex flex-col gap-2 w-20">
         {!selectedSegment &&
           <>
             <span className="text-center px-3 py-1 text-xs font-medium uppercase text-gray-500">Select</span>
-            <span className="text-center px-3 py-1 text-xs font-medium uppercase text-gray-500">A</span>
+            {/* <span className="text-center px-3 py-1 text-xs font-medium uppercase text-gray-500">A</span> */}
             <span className="text-center px-3 py-1 text-xs font-medium uppercase text-gray-500">Segment</span>
           </>
         }

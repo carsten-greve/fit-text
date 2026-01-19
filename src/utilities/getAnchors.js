@@ -1,4 +1,4 @@
-import { isTopLine, isTopOrBottomLine } from '../utilities/topBottom';
+import { isTopLine, isTopOrBottomLine } from './topBottom';
 
 export const getAnchors = segments => {
   let prevSegment = segments.at(-1);

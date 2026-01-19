@@ -1,19 +1,24 @@
 import { Fragment } from 'react';
 import { useApp } from '../AppProvider';
-import { Stage, Layer, Text } from 'react-konva';
+import { Stage, Layer, Text, Path, Circle } from 'react-konva';
 import { BackgroundImage } from './BackgroundImage';
 import { Segment } from './Segment';
 import { ControlPolygon } from './ControlPolygon';
 import { Anchor } from './Anchor';
 import { getAnchors } from '../utilities/getAnchors';
+import { getPathData } from '../utilities/getPathData';
 
 const FitArea = () => {
-  const { stageSize, sceneSize, konvaRef, segments, setSegments, imageUrl, setSelectedSegmentId } = useApp();
+  const { stageSize, sceneSize, konvaRef, segments, imageUrl, setSelectedSegmentId, textArea } = useApp();
 
   const anchors = getAnchors(segments);
 
-  // Anchor coordinates, that are not on the two horizontal lines.
-  let nonHorizontalAnchors = anchors.filter(anchor => !anchor.isOnTopOrBottomLine);
+  const pathData = getPathData(segments);
+  const path = new Konva.Path({data: pathData, dash: [10,10], stroke: 'red'});
+  const length = path.getLength();
+  const resolution = Math.round(length/100);
+  console.log(path);
+  console.log(length);
 
   return (
     <main className="relative flex-1 w-full bg-gray-100 overflow-hidden" ref={konvaRef}>
@@ -51,6 +56,30 @@ const FitArea = () => {
               anchor={anchor}
             />
           )}
+
+          <Path data={pathData} dash={[10,10]} stroke={'red'} listening={false} />
+
+          {
+            [...Array(resolution).keys()].map((i) => {
+              const point = path.getPointAtLength(length * i / resolution);
+              // console.log(point);
+              if (point) {
+                return <Circle key={i} position={point} radius={5} stroke={'black'} strokeWidth={1} listening={false} />
+              }
+            })
+          }
+
+          {textArea.leftPoints.at(0) && <Path data={
+            textArea.leftPoints.reduce((path, point, i) => {
+              return `${path} ${i === 0 ? "M" : "L"}${point.x},${point.y}`
+            }, '')
+          } dash={[10,10]} stroke={'cyan'} listening={false} />}
+
+          {textArea.rightPoints.at(0) && <Path data={
+            textArea.rightPoints.reduce((path, point, i) => {
+              return `${path} ${i === 0 ? "M" : "L"}${point.x},${point.y}`
+            }, '')
+          } dash={[10,10]} stroke={'cyan'} listening={false} />}
         </Layer>
       </Stage>
     </main>
