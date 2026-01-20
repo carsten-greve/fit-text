@@ -2,7 +2,7 @@ import { useApp } from '../AppProvider';
 import { Circle } from 'react-konva';
 import { produce } from 'immer'
 import { getNearestSegments } from '../utilities/getNearestSegments';
-import { isTopOrBottomLine } from '../utilities/topBottom';
+import { isTopOrBottomLine, getTopLineY, getBottomLineY } from '../utilities/topBottom';
 import { getAnchors, getAnchorEqualityFunction } from '../utilities/getAnchors';
 
 export const Anchor = ({ anchor }) => {
@@ -50,8 +50,8 @@ export const Anchor = ({ anchor }) => {
       else {
         const anchors = sortedAnchors[anchor.location].anchors;
         const index = sortedAnchors[anchor.location].index;
-        minY = Math.max(minY, 10 + anchors[index - 1].point.y);
-        maxY = Math.min(maxY, anchors[index + 1].point.y - 10);
+        minY = Math.max(minY, 10 + getTopLineY(segments), anchors[index - 1].point.y);
+        maxY = Math.min(maxY, getBottomLineY(segments) - 10, anchors[index + 1].point.y);
       }
     }
 

@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useRef, useEffect } from 'react';
-import { getTextArea } from './utilities/getTextArea';
+// import { getTextArea } from './utilities/getTextArea';
 
 const AppContext = createContext();
 
@@ -11,7 +11,7 @@ export const AppProvider = ({ children }) => {
   const [nextSegmentId, setNextSegmentId] = useState(5);
   const [imageUrl, setImageUrl] = useState(null);
   const [selectedSegmentId, setSelectedSegmentId] = useState(0);
-  const [textArea, setTextArea] = useState(getTextArea([], 1));
+  // const [textArea, setTextArea] = useState(getTextArea([], 1));
 
   const sceneSizeRef = useRef();
   sceneSizeRef.current = sceneSize;
@@ -62,9 +62,9 @@ export const AppProvider = ({ children }) => {
     };
   }, []);
 
-  useEffect(() => {
-    setTextArea(getTextArea(segments, 100));
-  }, [segments]);
+  // useEffect(() => {
+  //   setTextArea(getTextArea(segments, 100));
+  // }, [segments]);
 
   return (
     <AppContext.Provider value={{
@@ -79,7 +79,7 @@ export const AppProvider = ({ children }) => {
       setImageUrl,
       selectedSegmentId,
       setSelectedSegmentId,
-      textArea,
+      // textArea,
     }}>
       {children}
     </AppContext.Provider>
