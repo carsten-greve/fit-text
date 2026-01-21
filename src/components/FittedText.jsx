@@ -1,43 +1,40 @@
 import { useApp } from '../AppProvider';
 import { Text } from 'react-konva';
-import { getTextArea } from '../utilities/getTextArea';
-import { getTopLineY, getBottomLineY } from '../utilities/topBottom';
+import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
+import { getTextLayout } from '../utilities/getTextLayout';
 
 export const FittedText = () => {
   const { segments } = useApp();
 
   if (segments.length === 0) return;
 
-  const textArea = getTextArea(segments, 100);
-
-  const topLineY = getTopLineY(segments);
-  const bottomLineY = getBottomLineY(segments);
-
-  const text = 'test';
-  const measureText = measure(text);
-  const middleY = (topLineY + bottomLineY) / 2;
-  const minMax = textArea.getMinMax(middleY);
-  const middleX = (minMax.leftX + minMax.rightX) / 2;
+  const shapeBoundaries = getShapeBoundaries(segments, 500);
+  const fontFamily = 'Arial';
+  const fontSize = 20;
+  const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+  const words = text.split(/\s+/);
+  const lines = getTextLayout(words, 1.5, shapeBoundaries, fontFamily, fontSize);
 
   return (
-    <Text text={'test'} x={middleX - measureText.width / 2} y={middleY - measureText.height / 2}></Text>
+    <>
+      {lines.map((line, lIdx) => {
+        let currentX = line.x;
+        return line.words.map((word, wIdx) => {
+          const wordX = currentX;
+          currentX += word.width + line.spaceWidth;
+          return (
+            <Text
+              key={`${lIdx}-${wIdx}`}
+              x={wordX}
+              y={line.y}
+              text={word.text}
+              fontSize={fontSize}
+              fontFamily={fontFamily}
+              listening={false}
+            />
+          );
+        });
+      })}
+    </>
   );
-}
-
-const measure = (text) => {
-  const konvaText = new Konva.Text({
-    fontSize: 12,
-    fontFamily: 'Arial',
-  });
-  return konvaText.measureSize(text);
-
-  // const canvas = document.createElement('canvas');
-  // const ctx = canvas.getContext('2d');
-  // ctx.font = `normal 12px 'Arial'`;
-
-  // let metrics = ctx.measureText(text);
-  // let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
-  // let actualHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-
-  // return {width: metrics.width, height: fontHeight};
 }

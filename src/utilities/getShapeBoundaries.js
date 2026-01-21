@@ -1,8 +1,11 @@
 import { binarySearch } from './binarySearch';
 import { getPathData } from './getPathData';
+import { getTopLineY, getBottomLineY } from './topBottom';
 
-export const getTextArea = (segments, sampleCount = 100) => {
+export const getShapeBoundaries = (segments, sampleCount = 100) => {
   return {
+    topY: getTopLineY(segments),
+    bottomY: getBottomLineY(segments),
     leftPoints: getPoints(segments, 'left', sampleCount).reverse(),
     rightPoints: getPoints(segments, 'right', sampleCount),
 

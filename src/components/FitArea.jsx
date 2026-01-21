@@ -16,7 +16,7 @@ const FitArea = () => {
     segments,
     imageUrl,
     setSelectedSegmentId,
-    // textArea,
+    // shapeBoundaries,
   } = useApp();
 
   const anchors = getAnchors(segments);
@@ -60,14 +60,14 @@ const FitArea = () => {
 
           <FittedText />
 
-          {/* {textArea.leftPoints.at(0) && <Path data={
-            textArea.leftPoints.reduce((path, point, i) => {
+          {/* {shapeBoundaries.leftPoints.at(0) && <Path data={
+            shapeBoundaries.leftPoints.reduce((path, point, i) => {
               return `${path} ${i === 0 ? "M" : "L"}${point.x},${point.y}`
             }, '')
           } dash={[10,10]} stroke={'cyan'} listening={false} />}
 
-          {textArea.rightPoints.at(0) && <Path data={
-            textArea.rightPoints.reduce((path, point, i) => {
+          {shapeBoundaries.rightPoints.at(0) && <Path data={
+            shapeBoundaries.rightPoints.reduce((path, point, i) => {
               return `${path} ${i === 0 ? "M" : "L"}${point.x},${point.y}`
             }, '')
           } dash={[10,10]} stroke={'cyan'} listening={false} />} */}
