@@ -10,6 +10,7 @@ export const AppProvider = ({ children }) => {
   const [nextSegmentId, setNextSegmentId] = useState(5);
   const [imageUrl, setImageUrl] = useState(null);
   const [selectedSegmentId, setSelectedSegmentId] = useState(0);
+  const [sampleCount, setSampleCount] = useState(500);
 
   const sceneSizeRef = useRef();
   sceneSizeRef.current = sceneSize;
@@ -73,6 +74,8 @@ export const AppProvider = ({ children }) => {
       setImageUrl,
       selectedSegmentId,
       setSelectedSegmentId,
+      sampleCount,
+      setSampleCount,
     }}>
       {children}
     </AppContext.Provider>
