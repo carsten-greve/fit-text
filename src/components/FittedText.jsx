@@ -14,12 +14,13 @@ export const FittedText = () => {
   const bottomLineY = getBottomLineY(segments);
 
   const text = 'test';
-  const middleY = (topLineY + bottomLineY - measure(text).height) / 2;
+  const measureText = measure(text);
+  const middleY = (topLineY + bottomLineY) / 2;
   const minMax = textArea.getMinMax(middleY);
-  const middleX = (minMax.leftX + minMax.rightX - measure(text).width) / 2;
+  const middleX = (minMax.leftX + minMax.rightX) / 2;
 
   return (
-    <Text text={'test'} x={middleX} y={middleY}></Text>
+    <Text text={'test'} x={middleX - measureText.width / 2} y={middleY - measureText.height / 2}></Text>
   );
 }
 

@@ -6,10 +6,10 @@ export const getTextArea = (segments, sampleCount = 100) => {
     leftPoints: getPoints(segments, 'left', sampleCount).reverse(),
     rightPoints: getPoints(segments, 'right', sampleCount),
 
-    getMinMax(y) {
+    getMinMax(y, height = 12) {
       return {
-        leftX: getX(this.leftPoints, y),
-        rightX: getX(this.rightPoints, y),
+        leftX: Math.max(...[...Array(1 + Math.round(height)).keys()].map(i => getX(this.leftPoints, y + i - (height / 2)))),
+        rightX: Math.min(...[...Array(1 + Math.round(height)).keys()].map(i => getX(this.rightPoints, y + i - (height / 2)))),
       };
     },
   };
