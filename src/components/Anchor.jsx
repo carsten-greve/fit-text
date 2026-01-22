@@ -18,7 +18,9 @@ export const Anchor = ({ anchor }) => {
       const allAnchors = getAnchors(segments).filter(anchor => anchor.isEndPoint);
       const sortedAnchors = { left: {}, right: {} };
       for (const [location, value] of Object.entries(sortedAnchors)) {
-        const locationAnchors = allAnchors.filter(anchor => anchor.location === location).sort((a, b) => a.point.y - b.point.y);
+        const locationAnchors = allAnchors
+          .filter(anchor => anchor.location === location)
+          .sort((a, b) => a.locationOrder - b.locationOrder);
         value['anchors'] = locationAnchors;
         value['index'] = locationAnchors.findIndex(getAnchorEqualityFunction(anchor.startSegmentId, anchor.pointIndex));
       }
