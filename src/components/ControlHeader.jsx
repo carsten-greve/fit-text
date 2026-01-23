@@ -6,7 +6,7 @@ import { PdfSaver } from './PdfSaver';
 
 const ControlHeader = () => {
   return (
-    <header className="flex h-30 items-center gap-2 border-b bg-white px-3 shadow-sm z-10">
+    <header className="flex h-30 items-center gap-2 border-b bg-white px-3 shadow-sm">
 
       <Dropbox />
       <SegmentControls />

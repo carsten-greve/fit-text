@@ -1,11 +1,24 @@
 import { useApp } from '../AppProvider';
-import { Listbox, ListboxButton, ListboxOptions } from '@headlessui/react';
-import { Type, ListChevronsUpDown } from 'lucide-react';
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
+import { Type, ListChevronsUpDown, ChevronDownIcon, CheckIcon } from 'lucide-react';
+import { clsx } from 'clsx'
 import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
 import { getTextLayout } from '../utilities/getTextLayout';
 
 export const FontSelection = () => {
-  const { segments, sampleCount, fontFamily, fontSize, setFontSize, lineSpacing, setLineSpacing, textToFit, setIsAutoFitting } = useApp();
+  const {
+    segments,
+    sampleCount,
+    fontSize,
+    setFontSize,
+    lineSpacing,
+    setLineSpacing,
+    textToFit,
+    setIsAutoFitting,
+    fontList,
+    selectedFont,
+    setSelectedFont,
+  } = useApp();
 
   const autoFit = async (fitType) => {
     try {
@@ -22,7 +35,7 @@ export const FontSelection = () => {
       let lastFitLineSpacing = lineSpacing;
       let limit = 100;
       while (limit-- > 0) {
-        const { wordsFitRatio, spaceFitRatio } = getTextLayout(words, newLineSpacing, shapeBoundaries, fontFamily, newFontSize);
+        const { wordsFitRatio, spaceFitRatio } = getTextLayout(words, newLineSpacing, shapeBoundaries, selectedFont.name, newFontSize);
         if ((wordsFitRatio === 1 && spaceFitRatio === 1) || factor < 0.001) {
           break;
         }
@@ -65,15 +78,38 @@ export const FontSelection = () => {
 
   return (
     <>
-      {/* Font Selection (Headless UI Listbox) */}
-      <div className="w-48">
-        <Listbox>
-          <ListboxButton className="w-full flex justify-between p-2 border-2 rounded-md text-sm">
-            Select Font <Type className="size-4" />
+      <div className="w-40 self-start py-2">
+        <Listbox value={selectedFont} onChange={setSelectedFont}>
+          <ListboxButton
+            className={clsx(
+              'relative block w-full border-2 rounded-lg bg-black/5 py-1.5 pr-8 pl-3 text-left text-sm/6 text-black',
+              'focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-black'
+            )}
+          >
+            {selectedFont.name}
+            <ChevronDownIcon
+              className="group pointer-events-none absolute top-2.5 right-2.5 size-4"
+              aria-hidden="true"
+            />
           </ListboxButton>
-          {/* Listbox.Options go here */}
-          <ListboxOptions>
-
+          <ListboxOptions
+            anchor="bottom"
+            transition
+            className={clsx(
+              'w-(--button-width) rounded-xl border-2 border-black bg-gray-100 p-1 [--anchor-gap:--spacing(1)]',
+              'focus:outline-none transition duration-100 ease-in data-leave:data-closed:opacity-0'
+            )}
+          >
+            {fontList.map((font) => (
+              <ListboxOption
+                key={font.id}
+                value={font}
+                className="group flex cursor-default items-center gap-2 rounded-lg px-3 py-1.5 select-none data-focus:bg-black/10"
+              >
+                <CheckIcon className="invisible size-4 group-data-selected:visible" />
+                <div className="text-sm/6 text-black">{font.name}</div>
+              </ListboxOption>
+            ))}
           </ListboxOptions>
         </Listbox>
       </div>

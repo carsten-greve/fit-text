@@ -4,13 +4,13 @@ import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
 import { getTextLayout } from '../utilities/getTextLayout';
 
 export const FittedText = () => {
-  const { segments, sampleCount, fontFamily, fontSize, lineSpacing, textToFit } = useApp();
+  const { segments, sampleCount, selectedFont, fontSize, lineSpacing, textToFit } = useApp();
 
   if (segments.length === 0) return;
 
   const shapeBoundaries = getShapeBoundaries(segments, sampleCount);
   const words = textToFit.split(/\s+/);
-  const { lines } = getTextLayout(words, lineSpacing, shapeBoundaries, fontFamily, fontSize);
+  const { lines } = getTextLayout(words, lineSpacing, shapeBoundaries, selectedFont.name, fontSize);
 
   return (
     <>
@@ -26,7 +26,7 @@ export const FittedText = () => {
               y={line.y}
               text={word.text}
               fontSize={fontSize}
-              fontFamily={fontFamily}
+              fontFamily={selectedFont.name}
               listening={false}
             />
           );

@@ -4,12 +4,12 @@ import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
 import { getTextLayout } from '../utilities/getTextLayout';
 
 export const PdfSaver = () => {
-  const { segments, sampleCount, fontFamily, fontSize, lineSpacing, textToFit } = useApp();
+  const { segments, sampleCount, selectedFont, fontSize, lineSpacing, textToFit } = useApp();
 
   const saveAsPdf = () => {
     const shapeBoundaries = getShapeBoundaries(segments, sampleCount);
     const words = textToFit.split(/\s+/);
-    const { lines } = getTextLayout(words, lineSpacing, shapeBoundaries, fontFamily, fontSize);
+    const { lines } = getTextLayout(words, lineSpacing, shapeBoundaries, selectedFont.name, fontSize);
     const width = shapeBoundaries.rightX - shapeBoundaries.leftX;
     const height = shapeBoundaries.bottomY - shapeBoundaries.topY;
     const offsetX = fontSize;
@@ -21,7 +21,7 @@ export const PdfSaver = () => {
       format: [width + 2 * fontSize, height + 2 * fontSize],
     });
 
-    doc.setFont(fontFamily);
+    doc.setFont(selectedFont.name);
     // doc.setFontType("bold");
     doc.setFontSize(fontSize);
 
