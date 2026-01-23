@@ -160,7 +160,7 @@ export const SegmentControls = () => {
     : inactiveButtonClass;
 
     return (
-    <div className="flex flex-row gap-3 border-l pl-4">
+    <div className="flex flex-row gap-2 border-l border-r px-2">
       <div className="flex flex-col gap-2">
         <button
           onClick={() => handleTypeClick('line')}

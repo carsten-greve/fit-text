@@ -1,6 +1,6 @@
 import { useApp } from '../AppProvider';
 import { Listbox, ListboxButton, ListboxOptions } from '@headlessui/react';
-import { Type, AlignLeft, ListChevronsUpDown } from 'lucide-react';
+import { Type, ListChevronsUpDown } from 'lucide-react';
 import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
 import { getTextLayout } from '../utilities/getTextLayout';
 
@@ -18,9 +18,9 @@ export const FontSelection = () => {
       let isGrowing = true;
       let newFontSize = fontSize;
       let newLineSpacing = lineSpacing;
-      let limit = 100;
       let lastFitFontSize = fontSize;
       let lastFitLineSpacing = lineSpacing;
+      let limit = 100;
       while (limit-- > 0) {
         const { wordsFitRatio, spaceFitRatio } = getTextLayout(words, newLineSpacing, shapeBoundaries, fontFamily, newFontSize);
         if ((wordsFitRatio === 1 && spaceFitRatio === 1) || factor < 0.001) {
@@ -91,8 +91,7 @@ export const FontSelection = () => {
               onChange={e => setFontSize(parseFloat(e.target.value))}
               className="w-full border border-slate-300 rounded px-2 py-0.5 text-sm focus:ring-1 focus:ring-blue-500 outline-none"
             />
-            <button 
-              type="button"
+            <button
               className="flex-0 w-full rounded bg-blue-600 px-2 py-2 text-xs font-semibold text-white hover:bg-blue-700"
               onClick={() => autoFit('fontSize')}
             >
@@ -113,8 +112,7 @@ export const FontSelection = () => {
               onChange={e => setLineSpacing(parseFloat(e.target.value))}
               className="w-full border border-slate-300 rounded px-2 py-0.5 text-sm focus:ring-1 focus:ring-blue-500 outline-none"
             />
-            <button 
-              type="button"
+            <button
               className="flex-0 w-full rounded bg-blue-600 px-2 py-2 text-xs font-semibold text-white hover:bg-blue-700"
               onClick={() => autoFit('lineSpacing')}
             >

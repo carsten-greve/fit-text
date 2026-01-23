@@ -3,11 +3,16 @@ import { getPathData } from './getPathData';
 import { getTopLineY, getBottomLineY } from './topBottom';
 
 export const getShapeBoundaries = (segments, sampleCount = 100) => {
+  const leftPoints = getPoints(segments, 'left', sampleCount).reverse();
+  const rightPoints = getPoints(segments, 'right', sampleCount);
+
   return {
     topY: getTopLineY(segments),
     bottomY: getBottomLineY(segments),
-    leftPoints: getPoints(segments, 'left', sampleCount).reverse(),
-    rightPoints: getPoints(segments, 'right', sampleCount),
+    leftX: Math.min(...leftPoints.map(point => point.x)),
+    rightX: Math.max(...rightPoints.map(point => point.x)),
+    leftPoints: leftPoints,
+    rightPoints: rightPoints,
 
     getMinMax(y, height = 12) {
       return {
