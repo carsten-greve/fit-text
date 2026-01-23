@@ -12,13 +12,13 @@ export const PdfSaver = () => {
     const { lines } = getTextLayout(words, lineSpacing, shapeBoundaries, fontFamily, fontSize);
     const width = shapeBoundaries.rightX - shapeBoundaries.leftX;
     const height = shapeBoundaries.bottomY - shapeBoundaries.topY;
-    const offsetX = fontSize * width / height;
+    const offsetX = fontSize;
     const offsetY = 1.7 * fontSize;
 
     const doc = new jsPDF({
-      orientation: "landscape",
+      orientation: width > height ? "landscape" : "portrait",
       unit: "pt",
-      format: [(height + 2 * fontSize) * width / height, height + 2 * fontSize],
+      format: [width + 2 * fontSize, height + 2 * fontSize],
     });
 
     doc.setFont(fontFamily);
