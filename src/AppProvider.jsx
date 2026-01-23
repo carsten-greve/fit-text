@@ -11,6 +11,8 @@ export const AppProvider = ({ children }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [selectedSegmentId, setSelectedSegmentId] = useState(0);
   const [sampleCount, setSampleCount] = useState(500);
+  const [fontSize, setFontSize] = useState(12);
+  const [lineSpacing, setLineSpacing] = useState(1.5);
 
   const sceneSizeRef = useRef();
   sceneSizeRef.current = sceneSize;
@@ -76,6 +78,10 @@ export const AppProvider = ({ children }) => {
       setSelectedSegmentId,
       sampleCount,
       setSampleCount,
+      fontSize,
+      setFontSize,
+      lineSpacing,
+      setLineSpacing,
     }}>
       {children}
     </AppContext.Provider>

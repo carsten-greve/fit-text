@@ -4,16 +4,15 @@ import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
 import { getTextLayout } from '../utilities/getTextLayout';
 
 export const FittedText = () => {
-  const { segments, sampleCount } = useApp();
+  const { segments, sampleCount, fontSize, lineSpacing } = useApp();
 
   if (segments.length === 0) return;
 
   const shapeBoundaries = getShapeBoundaries(segments, sampleCount);
   const fontFamily = 'Arial';
-  const fontSize = 20;
   const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
   const words = text.split(/\s+/);
-  const lines = getTextLayout(words, 1.5, shapeBoundaries, fontFamily, fontSize);
+  const lines = getTextLayout(words, lineSpacing, shapeBoundaries, fontFamily, fontSize);
 
   return (
     <>

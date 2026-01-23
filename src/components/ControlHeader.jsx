@@ -1,7 +1,7 @@
-import { Listbox, ListboxButton, ListboxOptions, Textarea } from '@headlessui/react';
-import { Type } from 'lucide-react';
+import { Textarea } from '@headlessui/react';
 import { SegmentControls } from './SegmentControls';
 import { Dropbox } from './Dropbox';
+import { FontSelection } from './FontSelection';
 
 const ControlHeader = () => {
   return (
@@ -18,18 +18,7 @@ const ControlHeader = () => {
         />
       </div>
 
-      {/* Font Selection (Headless UI Listbox) */}
-      <div className="w-48">
-        <Listbox>
-          <ListboxButton className="w-full flex justify-between p-2 border-2 rounded-md text-sm">
-            Select Font <Type className="size-4" />
-          </ListboxButton>
-          {/* Listbox.Options go here */}
-          <ListboxOptions>
-
-          </ListboxOptions>
-        </Listbox>
-      </div>
+      <FontSelection />
     </header>
   );
 };
