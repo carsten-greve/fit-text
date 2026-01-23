@@ -41,5 +41,9 @@ export const getTextLayout = (words, lineHeightRatio, shapeBoundaries, fontFamil
     currentY += fontSize * lineHeightRatio;
   };
 
-  return lines;
+  return {
+    lines,
+    wordsFitRatio: currentWordIndex / words.length,
+    spaceFitRatio: currentY / (shapeBoundaries.bottomY - shapeBoundaries.topY),
+  };
 };

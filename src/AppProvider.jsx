@@ -11,8 +11,11 @@ export const AppProvider = ({ children }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [selectedSegmentId, setSelectedSegmentId] = useState(0);
   const [sampleCount, setSampleCount] = useState(500);
+  const [fontFamily, setFontFamily] = useState('Arial');
   const [fontSize, setFontSize] = useState(12);
   const [lineSpacing, setLineSpacing] = useState(1.5);
+  const [textToFit, setTextToFit] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+  const [isAutoFitting, setIsAutoFitting] = useState(false);
 
   const sceneSizeRef = useRef();
   sceneSizeRef.current = sceneSize;
@@ -82,6 +85,12 @@ export const AppProvider = ({ children }) => {
       setFontSize,
       lineSpacing,
       setLineSpacing,
+      fontFamily,
+      setFontFamily,
+      textToFit,
+      setTextToFit,
+      isAutoFitting,
+      setIsAutoFitting,
     }}>
       {children}
     </AppContext.Provider>
