@@ -8,7 +8,7 @@ import { Anchor } from './Anchor';
 import { FittedText } from './FittedText';
 import { getAnchors } from '../utilities/getAnchors';
 
-const FitArea = () => {
+export const FitArea = () => {
   const {
     stageSize,
     sceneSize,
@@ -63,5 +63,3 @@ const FitArea = () => {
     </main>
   );
 }
-
-export default FitArea
