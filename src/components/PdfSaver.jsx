@@ -4,12 +4,12 @@ import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
 import { getTextLayout } from '../utilities/getTextLayout';
 
 export const PdfSaver = () => {
-  const { segments, sampleCount, selectedFont, fontSize, lineSpacing, textToFit } = useApp();
+  const { segments, sampleCount, selectedFont, fontSize, lineSpacing, textToFit, paragraphIndent, isFirstLineIndent } = useApp();
 
   const saveAsPdf = () => {
     const shapeBoundaries = getShapeBoundaries(segments, sampleCount);
-    const words = textToFit.split(/\s+/);
-    const { lines } = getTextLayout(words, lineSpacing, shapeBoundaries, selectedFont.name, fontSize);
+    const paragraphsOfWords = textToFit.split(/\n\s*\n/).map(p => p.split(/\s+/));
+    const { lines } = getTextLayout(paragraphsOfWords, lineSpacing, shapeBoundaries, selectedFont.name, fontSize, paragraphIndent, isFirstLineIndent);
     const width = shapeBoundaries.rightX - shapeBoundaries.leftX;
     const height = shapeBoundaries.bottomY - shapeBoundaries.topY;
     const offsetX = fontSize;

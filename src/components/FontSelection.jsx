@@ -19,6 +19,8 @@ export const FontSelection = () => {
     fontList,
     selectedFont,
     setSelectedFont,
+    paragraphIndent,
+    isFirstLineIndent,
   } = useApp();
 
   const autoFit = async (fitType) => {
@@ -26,7 +28,7 @@ export const FontSelection = () => {
       setIsAutoFitting(true);
 
       const shapeBoundaries = getShapeBoundaries(segments, sampleCount);
-      const words = textToFit.split(/\s+/);
+      const paragraphsOfWords = textToFit.split(/\n\s*\n/).map(p => p.split(/\s+/));
 
       let factor = 0.2;
       let isGrowing = true;
@@ -36,7 +38,8 @@ export const FontSelection = () => {
       let lastFitLineSpacing = lineSpacing;
       let limit = 100;
       while (limit-- > 0) {
-        const { wordsFitRatio, spaceFitRatio } = getTextLayout(words, newLineSpacing, shapeBoundaries, selectedFont.name, newFontSize);
+        const { wordsFitRatio, spaceFitRatio } =
+          getTextLayout(paragraphsOfWords, newLineSpacing, shapeBoundaries, selectedFont.name, newFontSize, paragraphIndent, isFirstLineIndent);
         if ((wordsFitRatio === 1 && spaceFitRatio === 1) || factor < 0.001) {
           break;
         }

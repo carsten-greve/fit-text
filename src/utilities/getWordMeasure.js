@@ -1,4 +1,4 @@
-export const getWordMeasure = (word, fontFamily = 'Arial', fontSize = 12) => {
+export const getWordMeasure = (word, fontFamily, fontSize) => {
   const konvaText = new Konva.Text({
     fontFamily,
     fontSize,
