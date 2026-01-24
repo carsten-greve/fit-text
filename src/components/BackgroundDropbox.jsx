@@ -11,8 +11,6 @@ export const BackgroundDropbox = () => {
     if (acceptedFiles[0]) {
       setFile(acceptedFiles[0]);
       const url = URL.createObjectURL(acceptedFiles[0]);
-      console.log(`acceptedFiles[0]: ${acceptedFiles[0]}`);
-      console.log(`image url: ${url}`);
       setImageUrl(url);
     }
   }, []);

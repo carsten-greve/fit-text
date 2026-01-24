@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { useApp } from '../AppProvider';
-import { Stage, Layer, Text, Path } from 'react-konva';
+import { Stage, Layer } from 'react-konva';
 import { BackgroundImage } from './BackgroundImage';
 import { Segment } from './Segment';
 import { ControlPolygon } from './ControlPolygon';
@@ -11,7 +11,6 @@ import { getAnchors } from '../utilities/getAnchors';
 export const FitArea = () => {
   const {
     stageSize,
-    sceneSize,
     konvaRef,
     segments,
     imageUrl,
@@ -31,11 +30,6 @@ export const FitArea = () => {
       >
         <Layer>
           {imageUrl && <BackgroundImage url={imageUrl} stageSize={stageSize} />}
-          <Text text={`sceneSize.width: ${sceneSize.width}`} x={0} y={0}></Text>
-          <Text text={`sceneSize.height: ${sceneSize.height}`} x={0} y={20}></Text>
-          <Text text={`stageSize.width: ${stageSize.width}`} x={0} y={40}></Text>
-          <Text text={`stageSize.height: ${stageSize.height}`} x={0} y={60}></Text>
-          <Text text={`stageSize.scale: ${stageSize.scale}`} x={0} y={80}></Text>
 
           {segments.map(segment =>
             <Fragment key={segment.id}>

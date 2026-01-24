@@ -28,9 +28,6 @@ export const AppProvider = ({ children }) => {
   sceneSizeRef.current = sceneSize;
 
   const updateSize = () => {
-    console.log(`updateSize sceneWidth = ${sceneSizeRef.current.width}`);
-    console.log(`updateSize sceneHeight = ${sceneSizeRef.current.height}`);
-
     const width = konvaRef.current.offsetWidth;
     const scale = width / sceneSizeRef.current.width;
 
@@ -52,12 +49,6 @@ export const AppProvider = ({ children }) => {
     const left = width / 4;
     const bottom = height - top;
     const right = width - left;
-    console.log(`width: ${width}`);
-    console.log(`height: ${height}`);
-    console.log(`top: ${top}`);
-    console.log(`left: ${left}`);
-    console.log(`bottom: ${bottom}`);
-    console.log(`right: ${right}`);
     setSegments([
       { id: 1, type: 'line', location: 'top', points: [{x: left, y: top}, {x: right, y: top}] },
       { id: 2, type: 'line', location: 'right', points: [{x: right, y: top}, {x: right, y: bottom}] },
