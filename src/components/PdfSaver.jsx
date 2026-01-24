@@ -21,8 +21,11 @@ export const PdfSaver = () => {
       format: [width + 2 * fontSize, height + 2 * fontSize],
     });
 
+    if (selectedFont.base64Content) {
+      doc.addFileToVFS(selectedFont.name, selectedFont.base64Content);
+      doc.addFont(selectedFont.name, selectedFont.name, "normal");
+    }
     doc.setFont(selectedFont.name);
-    // doc.setFontType("bold");
     doc.setFontSize(fontSize);
 
     for (const line of lines) {

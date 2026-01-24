@@ -3,7 +3,7 @@ import { useApp } from '../AppProvider';
 import { Upload } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
 
-export const Dropbox = () => {
+export const BackgroundDropbox = () => {
   const [file, setFile] = useState(null);
   const { imageUrl, setImageUrl } = useApp();
 

@@ -4,6 +4,7 @@ import { Type, ListChevronsUpDown, ChevronDownIcon, CheckIcon } from 'lucide-rea
 import { clsx } from 'clsx'
 import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
 import { getTextLayout } from '../utilities/getTextLayout';
+import { FontDropbox } from './FontDropbox';
 
 export const FontSelection = () => {
   const {
@@ -78,43 +79,46 @@ export const FontSelection = () => {
 
   return (
     <>
-      <div className="w-40 self-start py-2">
-        <Listbox value={selectedFont} onChange={setSelectedFont}>
-          <ListboxButton
-            className={clsx(
-              'relative block w-full border-2 rounded-lg bg-black/5 py-1.5 pr-8 pl-3 text-left text-sm/6 text-black',
-              'focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-black'
-            )}
-          >
-            {selectedFont.name}
-            <ChevronDownIcon
-              className="group pointer-events-none absolute top-2.5 right-2.5 size-4"
-              aria-hidden="true"
-            />
-          </ListboxButton>
-          <ListboxOptions
-            anchor="bottom"
-            transition
-            className={clsx(
-              'w-(--button-width) rounded-xl border-2 border-black bg-gray-100 p-1 [--anchor-gap:--spacing(1)]',
-              'focus:outline-none transition duration-100 ease-in data-leave:data-closed:opacity-0'
-            )}
-          >
-            {fontList.map((font) => (
-              <ListboxOption
-                key={font.id}
-                value={font}
-                className="group flex cursor-default items-center gap-2 rounded-lg px-3 py-1.5 select-none data-focus:bg-black/10"
-              >
-                <CheckIcon className="invisible size-4 group-data-selected:visible" />
-                <div className="text-sm/6 text-black">{font.name}</div>
-              </ListboxOption>
-            ))}
-          </ListboxOptions>
-        </Listbox>
+      <div className="self-start">
+        <div className="w-40 self-start py-2">
+          <Listbox value={selectedFont} onChange={setSelectedFont}>
+            <ListboxButton
+              className={clsx(
+                'relative block w-full border-2 rounded-lg bg-black/5 py-1.5 pr-8 pl-3 text-left text-sm/6 text-black',
+                'focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-black'
+              )}
+            >
+              {selectedFont.name}
+              <ChevronDownIcon
+                className="group pointer-events-none absolute top-2.5 right-2.5 size-4"
+                aria-hidden="true"
+              />
+            </ListboxButton>
+            <ListboxOptions
+              anchor="bottom"
+              transition
+              className={clsx(
+                'w-(--button-width) rounded-xl border-2 border-black bg-gray-100 p-1 [--anchor-gap:--spacing(1)]',
+                'focus:outline-none transition duration-100 ease-in data-leave:data-closed:opacity-0'
+              )}
+            >
+              {fontList.map((font) => (
+                <ListboxOption
+                  key={font.id}
+                  value={font}
+                  className="group flex cursor-default items-center gap-2 rounded-lg px-3 py-1.5 select-none data-focus:bg-black/10"
+                >
+                  <CheckIcon className="invisible size-4 group-data-selected:visible" />
+                  <div className="text-sm/6 text-black">{font.name}</div>
+                </ListboxOption>
+              ))}
+            </ListboxOptions>
+          </Listbox>
+        </div>
+        <FontDropbox />
       </div>
-      <div className="grid grid-rows-2 gap-2 w-32">
-        <div className="flex flex-col gap-1">
+      <div className="grid grid-rows-2 gap-1 w-32">
+        <div className="flex flex-col gap-0.5 -mt-0.5">
           <label className="text-[11px] text-slate-500 flex items-center gap-1">
             <Type size={12} /> Font Size
           </label>
@@ -135,7 +139,7 @@ export const FontSelection = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           <label className="text-[11px] text-slate-500 flex items-center gap-1">
             <ListChevronsUpDown size={12} /> Line Spacing
           </label>

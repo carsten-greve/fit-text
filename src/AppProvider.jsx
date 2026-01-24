@@ -3,6 +3,8 @@ import { createContext, useState, useContext, useRef, useEffect } from 'react';
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  let fontId = 1;
+
   const [sceneSize, setSceneSize] = useState({});
   const [stageSize, setStageSize] = useState({});
   const konvaRef = useRef(null);
@@ -15,11 +17,12 @@ export const AppProvider = ({ children }) => {
   const [lineSpacing, setLineSpacing] = useState(1.5);
   const [textToFit, setTextToFit] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
   const [isAutoFitting, setIsAutoFitting] = useState(false);
+  const [selectedFont, setSelectedFont] = useState({ key: fontId, name: 'Times' });
   const [fontList, setFontList] = useState([
-    { id: 1, name: 'Times' },
-    { id: 2, name: 'Helvetica' },
+    { id: fontId++, name: 'Times' },
+    { id: fontId++, name: 'Helvetica' },
   ]);
-  const [selectedFont, setSelectedFont] = useState({ key: 1, name: 'Times' });
+  const [nextFontId, setNextFontId] = useState(fontId);
 
   const sceneSizeRef = useRef();
   sceneSizeRef.current = sceneSize;
@@ -97,6 +100,8 @@ export const AppProvider = ({ children }) => {
       setFontList,
       selectedFont,
       setSelectedFont,
+      nextFontId,
+      setNextFontId,
     }}>
       {children}
     </AppContext.Provider>
