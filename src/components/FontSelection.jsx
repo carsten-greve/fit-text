@@ -101,7 +101,7 @@ export const FontSelection = () => {
           </div>
         </div>
         <div className="flex flex-col gap-1 pt-2">
-          <label className="text-[11px] text-slate-500 flex gap-1">
+          <label className="text-[11px] text-slate-500 flex items-center gap-1">
             <ChartNoAxesGantt size={12} /> First Line
           </label>
           <div className="flex flex-row gap-1">
