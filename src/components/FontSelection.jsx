@@ -1,6 +1,6 @@
 import { useApp } from '../AppProvider';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
-import { Type, ListChevronsUpDown, ChevronDownIcon, CheckIcon } from 'lucide-react';
+import { Type, ListChevronsUpDown, ChevronDownIcon, CheckIcon, ListIndentIncrease, ChartNoAxesGantt } from 'lucide-react';
 import { clsx } from 'clsx'
 import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
 import { getTextLayout } from '../utilities/getTextLayout';
@@ -20,7 +20,9 @@ export const FontSelection = () => {
     selectedFont,
     setSelectedFont,
     paragraphIndent,
+    setParagraphIndent,
     isFirstLineIndent,
+    setIsFirstLineIndent,
   } = useApp();
 
   const autoFit = async (fitType) => {
@@ -82,6 +84,36 @@ export const FontSelection = () => {
 
   return (
     <>
+      <div className="grid grid-rows-2 gap-1 w-20">
+        <div className="flex flex-col gap-0.5 -mt-0.5">
+          <label className="text-[11px] text-slate-500 flex items-center gap-1">
+            <ListIndentIncrease size={12} /> Indent
+          </label>
+          <div className="flex flex-row gap-1">
+            <input 
+              type="number"
+              min="0"
+              step={1}
+              value={paragraphIndent}
+              onChange={e => setParagraphIndent(parseFloat(e.target.value))}
+              className="w-full border border-slate-300 rounded px-2 py-1.5 text-sm focus:ring-1 focus:ring-blue-500 outline-none"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-1 pt-2">
+          <label className="text-[11px] text-slate-500 flex gap-1">
+            <ChartNoAxesGantt size={12} /> First Line
+          </label>
+          <div className="flex flex-row gap-1">
+            <input 
+              type="checkbox"
+              checked={isFirstLineIndent}
+              onChange={e => setIsFirstLineIndent(e.target.checked)}
+              className="border border-slate-300 rounded px-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none"
+            />
+          </div>
+        </div>
+      </div>
       <div className="self-start">
         <div className="w-40 self-start py-2">
           <Listbox value={selectedFont} onChange={setSelectedFont}>
