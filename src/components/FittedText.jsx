@@ -1,7 +1,7 @@
 import { useApp } from '../AppProvider';
 import { Text } from 'react-konva';
-import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
-import { getTextLayout } from '../utilities/getTextLayout';
+import { getShapeBoundaries } from '../utils/getShapeBoundaries';
+import { getTextLayout } from '../utils/getTextLayout';
 
 export const FittedText = () => {
   const { segments, sampleCount, selectedFont, fontSize, lineSpacing, textToFit, paragraphIndent, isFirstLineIndent } = useApp();

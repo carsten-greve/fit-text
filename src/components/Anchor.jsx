@@ -1,7 +1,7 @@
 import { useApp } from '../AppProvider';
 import { Circle } from 'react-konva';
-import { getNearestSegments } from '../utilities/segmentUtils';
-import { isTopOrBottomLine } from '../utilities/segmentUtils';
+import { getNearestSegments } from '../utils/segmentUtils';
+import { isTopOrBottomLine } from '../utils/segmentUtils';
 import {
   isTopLeft,
   isTopRight,
@@ -9,7 +9,7 @@ import {
   isBottomLeft,
   isOnTopOrBottomLine,
   getBoundaryAnchors
-} from '../utilities/anchorUtils';
+} from '../utils/anchorUtils';
 
 export const Anchor = ({ anchor }) => {
   const { segments, updateSegment, endPointAnchors, sceneSize } = useApp();

@@ -1,5 +1,5 @@
 import { useApp } from '../AppProvider';
-import { isTopOrBottomLine } from '../utilities/segmentUtils';
+import { isTopOrBottomLine } from '../utils/segmentUtils';
 import { useSegment } from '../hooks/useSegment';
 
 const getQuotientPoint = (p1, p2, dividend, divisor) => {

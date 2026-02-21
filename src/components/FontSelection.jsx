@@ -2,8 +2,8 @@ import { useApp } from '../AppProvider';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { Type, ListChevronsUpDown, ChevronDownIcon, CheckIcon, ListIndentIncrease, ChartNoAxesGantt } from 'lucide-react';
 import { clsx } from 'clsx'
-import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
-import { getTextLayout } from '../utilities/getTextLayout';
+import { getShapeBoundaries } from '../utils/getShapeBoundaries';
+import { getTextLayout } from '../utils/getTextLayout';
 import { FontDropbox } from './FontDropbox';
 
 export const FontSelection = () => {

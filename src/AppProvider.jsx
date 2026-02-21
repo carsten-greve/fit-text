@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useRef, useEffect, useMemo, useCallback } from 'react';
 import { produce } from 'immer';
-import { getAnchors } from './utilities/anchorUtils';
+import { getAnchors } from './utils/anchorUtils';
 
 const AppContext = createContext();
 

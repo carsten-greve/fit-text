@@ -1,5 +1,5 @@
 import { useApp } from '../AppProvider';
-import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
+import { getShapeBoundaries } from '../utils/getShapeBoundaries';
 import { Path } from 'react-konva';
 
 export const ShapeBoundary = () => {

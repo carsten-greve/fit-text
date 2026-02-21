@@ -1,7 +1,7 @@
 import { jsPDF } from "jspdf";
 import { useApp } from '../AppProvider';
-import { getShapeBoundaries } from '../utilities/getShapeBoundaries';
-import { getTextLayout } from '../utilities/getTextLayout';
+import { getShapeBoundaries } from '../utils/getShapeBoundaries';
+import { getTextLayout } from '../utils/getTextLayout';
 
 export const PdfSaver = () => {
   const { segments, sampleCount, selectedFont, fontSize, lineSpacing, textToFit, paragraphIndent, isFirstLineIndent } = useApp();
