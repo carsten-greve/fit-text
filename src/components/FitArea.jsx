@@ -6,18 +6,16 @@ import { Segment } from './Segment';
 import { ControlPolygon } from './ControlPolygon';
 import { Anchor } from './Anchor';
 import { FittedText } from './FittedText';
-import { getAnchors } from '../utilities/getAnchors';
 
 export const FitArea = () => {
   const {
     stageSize,
     konvaRef,
     segments,
+    anchors,
     imageUrl,
     setSelectedSegmentId,
   } = useApp();
-
-  const anchors = getAnchors(segments);
 
   return (
     <main className="relative flex-1 w-full bg-gray-100 overflow-hidden" ref={konvaRef}>
@@ -46,7 +44,7 @@ export const FitArea = () => {
 
           {anchors.map(anchor =>
             <Anchor
-              key={`${anchor.startSegmentId}-${anchor.pointIndex}`}
+              key={`${anchor.nextSegmentId}-${anchor.pointIndex}`}
               anchor={anchor}
             />
           )}

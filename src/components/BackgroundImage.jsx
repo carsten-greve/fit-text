@@ -13,10 +13,10 @@ export const BackgroundImage = ({ url, stageSize }) => {
   return (
     <Image
       image={img}
-      x={x} 
+      x={x}
       y={y}
-      scaleX={scale} 
-      scaleY={scale} 
+      scaleX={scale}
+      scaleY={scale}
       opacity={0.3}
       listening={false}
     />

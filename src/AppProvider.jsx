@@ -1,4 +1,6 @@
-import { createContext, useState, useContext, useRef, useEffect } from 'react';
+import { createContext, useState, useContext, useRef, useEffect, useMemo, useCallback } from 'react';
+import { produce } from 'immer';
+import { getAnchors } from './utilities/anchorUtils';
 
 const AppContext = createContext();
 
@@ -8,8 +10,10 @@ export const AppProvider = ({ children }) => {
   const [sceneSize, setSceneSize] = useState({});
   const [stageSize, setStageSize] = useState({});
   const konvaRef = useRef(null);
-  const [segments, setSegments] = useState([]);
-  const [nextSegmentId, setNextSegmentId] = useState(5);
+  const [_segments, _setSegments] = useState({
+    byId: {},    // { 'id1': { id: 'id1', name: '...' }, ... }
+    allIds: []   // ['id1', 'id2', ...]
+  });
   const [imageUrl, setImageUrl] = useState(null);
   const [selectedSegmentId, setSelectedSegmentId] = useState(0);
   const [sampleCount, setSampleCount] = useState(500);
@@ -55,12 +59,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     const bottom = height - top;
     const right = width - left;
     setSegments([
-      { id: 1, type: 'line', location: 'top', points: [{x: left, y: top}, {x: right, y: top}] },
-      { id: 2, type: 'line', location: 'right', points: [{x: right, y: top}, {x: right, y: bottom}] },
-      { id: 3, type: 'line', location: 'bottom', points: [{x: right, y: bottom}, {x: left, y: bottom}] },
-      { id: 4, type: 'line', location: 'left', points: [{x: left, y: bottom}, {x: left, y: top}] },
+      { id: '1', nextSegmentId: '2', prevSegmentId: '4', type: 'line', location: 'top', points: [{x: left, y: top}, {x: right, y: top}] },
+      { id: '2', nextSegmentId: '3', prevSegmentId: '1', type: 'line', location: 'right', points: [{x: right, y: top}, {x: right, y: bottom}] },
+      { id: '3', nextSegmentId: '4', prevSegmentId: '2', type: 'line', location: 'bottom', points: [{x: right, y: bottom}, {x: left, y: bottom}] },
+      { id: '4', nextSegmentId: '1', prevSegmentId: '3', type: 'line', location: 'left', points: [{x: left, y: bottom}, {x: left, y: top}] },
     ]);
-    setNextSegmentId(nextSegmentId);
 
     window.addEventListener('resize', updateSize);
 
@@ -69,15 +72,86 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     };
   }, []);
 
-  return (
-    <AppContext.Provider value={{
+  const setSegments = useCallback((input) => {
+    _setSegments(produce((draft) => {
+      const currentArray = draft.allIds.map(id => draft.byId[id]);
+      const nextArray = typeof input === 'function' ? input(currentArray) : input;
+
+      if (!nextArray || nextArray.length === 0) {
+        draft.byId = {};
+        draft.allIds = [];
+        return;
+      }
+
+      draft.allIds = nextArray.map(s => s.id);
+
+      nextArray.forEach((segment, i) => {
+        const nextId = nextArray[(i + 1) % nextArray.length].id;
+        const prevId = nextArray.at(i - 1).id;
+
+        draft.byId[segment.id] = {
+          ...segment,
+          nextSegmentId: nextId,
+          prevSegmentId: prevId
+        };
+      });
+    }));
+  }, []);
+
+  const addSegmentAfter = useCallback((targetId, newSegmentData) => {
+    setSegments(prevArray => {
+      const targetIndex = prevArray.findIndex(s => s.id === targetId);
+      const newSegment = { ...newSegmentData, id: crypto.randomUUID() };
+
+      if (targetIndex === -1) return [...prevArray, newSegment];
+
+      const nextArray = [...prevArray];
+      nextArray.splice(targetIndex + 1, 0, newSegment);
+
+      return nextArray;
+    });
+  }, [setSegments]);
+
+  const removeSegment = useCallback((id) => {
+    setSegments(prev => prev.filter(s => s.id !== id));
+  }, [setSegments]);
+
+  const updateSegment = useCallback((id, input) => {
+    _setSegments(prev => produce(prev, draft => {
+      const segment = draft.byId[id];
+
+      if (!segment) return;
+
+      const updates = typeof input === 'function' ? input(segment) : input;
+
+      Object.assign(segment, updates);
+    }));
+  }, []);
+
+  const segments = useMemo(() => {
+    return _segments.allIds.map(id => _segments.byId[id]);
+  }, [_segments]);
+
+  const value = useMemo(() => {
+    const computedAnchors = getAnchors(segments);
+    const computedEndPointAnchors = computedAnchors.filter(anchor => anchor.isEndPoint);
+    computedEndPointAnchors.forEach((endPointAnchor, i) => {
+      endPointAnchor.nextEndPointAnchor = computedEndPointAnchors[(i + 1) % computedEndPointAnchors.length];
+      endPointAnchor.prevEndPointAnchor = computedEndPointAnchors.at(i - 1);
+    });
+
+    return {
       sceneSize,
       stageSize,
       konvaRef,
+      _segments,
       segments,
       setSegments,
-      nextSegmentId,
-      setNextSegmentId,
+      addSegmentAfter,
+      removeSegment,
+      updateSegment,
+      anchors: computedAnchors,
+      endPointAnchors: computedEndPointAnchors,
       imageUrl,
       setImageUrl,
       selectedSegmentId,
@@ -102,7 +176,33 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
       setParagraphIndent,
       isFirstLineIndent,
       setIsFirstLineIndent,
-    }}>
+    };
+  }, [
+    sceneSize,
+    stageSize,
+    konvaRef,
+    _segments,
+    segments,
+    setSegments,
+    addSegmentAfter,
+    removeSegment,
+    updateSegment,
+    imageUrl,
+    selectedSegmentId,
+    sampleCount,
+    fontSize,
+    lineSpacing,
+    textToFit,
+    isAutoFitting,
+    fontList,
+    selectedFont,
+    nextFontId,
+    paragraphIndent,
+    isFirstLineIndent,
+  ]);
+
+  return (
+    <AppContext.Provider value={value}>
       {children}
     </AppContext.Provider>
   );

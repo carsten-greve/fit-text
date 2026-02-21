@@ -6,7 +6,7 @@
  */
 export const cardinalToCubicBezier = (points, tension = 0.5, closed = true) => {
   if (points.length < 2) return "";
-  
+ 
   const size = points.length;
   // let path = `M ${points[0].x},${points[0].y} `;
   let path = '';
@@ -21,7 +21,7 @@ export const cardinalToCubicBezier = (points, tension = 0.5, closed = true) => {
     // Calculate Cubic Bezier control points
     const cp1x = p1.x + (p2.x - p0.x) * tension / 6;
     const cp1y = p1.y + (p2.y - p0.y) * tension / 6;
-    
+   
     const cp2x = p2.x - (p3.x - p1.x) * tension / 6;
     const cp2y = p2.y - (p3.y - p1.y) * tension / 6;
 

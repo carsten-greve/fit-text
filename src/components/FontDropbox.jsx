@@ -38,8 +38,8 @@ export const FontDropbox = () => {
   });
 
   return (
-    <div 
-      {...getRootProps()} 
+    <div
+      {...getRootProps()}
       className={`flex-none border-2 border-dashed rounded-lg p-2 py-3.5 w-40 text-center transition-colors cursor-pointer flex items-center justify-center  ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white hover:border-blue-400'}`}
     >
       <input {...getInputProps()} />

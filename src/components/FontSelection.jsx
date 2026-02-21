@@ -90,7 +90,7 @@ export const FontSelection = () => {
             <ListIndentIncrease size={12} /> Indent
           </label>
           <div className="flex flex-row gap-1">
-            <input 
+            <input
               type="number"
               min="0"
               step={1}
@@ -105,7 +105,7 @@ export const FontSelection = () => {
             <ChartNoAxesGantt size={12} /> First Line
           </label>
           <div className="flex flex-row gap-1">
-            <input 
+            <input
               type="checkbox"
               checked={isFirstLineIndent}
               onChange={e => setIsFirstLineIndent(e.target.checked)}
@@ -158,7 +158,7 @@ export const FontSelection = () => {
             <Type size={12} /> Font Size
           </label>
           <div className="flex flex-row gap-1">
-            <input 
+            <input
               type="number"
               min="1"
               step={0.5}
@@ -179,7 +179,7 @@ export const FontSelection = () => {
             <ListChevronsUpDown size={12} /> Line Spacing
           </label>
           <div className="flex flex-row gap-1">
-            <input 
+            <input
               type="number"
               min="1"
               step={0.01}
