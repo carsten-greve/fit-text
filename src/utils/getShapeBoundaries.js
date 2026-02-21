@@ -1,14 +1,15 @@
 import { binarySearch } from './binarySearch';
 import { getPathData } from './getPathData';
-import { getTopLineY, getBottomLineY } from './segmentUtils';
+import { getSegments, bottomLineId, topLineId } from './segmentUtils';
 
-export const getShapeBoundaries = (segments, sampleCount = 100) => {
+export const getShapeBoundaries = (_segments, sampleCount = 100) => {
+  const segments = getSegments(_segments);
   const leftPoints = getPoints(segments, 'left', sampleCount).reverse();
   const rightPoints = getPoints(segments, 'right', sampleCount);
 
   return {
-    topY: getTopLineY(segments),
-    bottomY: getBottomLineY(segments),
+    topY: _segments.byId[topLineId].points[0].y,
+    bottomY: _segments.byId[bottomLineId].points[0].y,
     leftX: Math.min(...leftPoints.map(point => point.x)),
     rightX: Math.max(...rightPoints.map(point => point.x)),
     leftPoints: leftPoints,

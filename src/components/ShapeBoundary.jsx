@@ -1,11 +1,11 @@
+import { Path } from 'react-konva';
 import { useApp } from '../AppProvider';
 import { getShapeBoundaries } from '../utils/getShapeBoundaries';
-import { Path } from 'react-konva';
 
 export const ShapeBoundary = () => {
-  const { segments, sampleCount } = useApp();
+  const { _segments, sampleCount } = useApp();
 
-  const shapeBoundaries = getShapeBoundaries(segments, sampleCount);
+  const shapeBoundaries = getShapeBoundaries(_segments, sampleCount);
 
   return (
     <>

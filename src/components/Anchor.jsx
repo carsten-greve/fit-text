@@ -1,6 +1,5 @@
 import { useApp } from '../AppProvider';
 import { Circle } from 'react-konva';
-import { getNearestSegments } from '../utils/segmentUtils';
 import { isTopOrBottomLine } from '../utils/segmentUtils';
 import {
   isTopLeft,
@@ -12,7 +11,7 @@ import {
 } from '../utils/anchorUtils';
 
 export const Anchor = ({ anchor }) => {
-  const { segments, updateSegment, endPointAnchors, sceneSize } = useApp();
+  const { _segments, updateSegment, endPointAnchors, sceneSize } = useApp();
 
   const handleDragMove = (anchor, e) => {
     let minX = 10;
@@ -61,17 +60,20 @@ export const Anchor = ({ anchor }) => {
     e.target.position(newPosition);
 
     const pointIndex = anchor.pointIndex;
-    const { segment, nextSegment, prevSegment, prevPrevSegment } = getNearestSegments(segments, anchor.nextSegmentId);
+    const segment = _segments.byId[anchor.nextSegmentId];
+    const nextSegment = _segments.byId[segment.nextSegmentId];
+    const prevSegment = _segments.byId[segment.prevSegmentId];
+    const prevPrevSegment = _segments.byId[prevSegment.prevSegmentId];
 
     updateSegment(segment.id, draft => { draft.points[pointIndex] = newPosition });
     if (pointIndex === 0) {
       updateSegment(prevSegment.id, draft => { draft.points = draft.points.with(-1, newPosition) });
     }
-    if (isTopOrBottomLine(segment)) {
+    if (isTopOrBottomLine(segment.id)) {
       updateSegment(segment.id, draft => { draft.points[1].y = newPosition.y });
       updateSegment(nextSegment.id, draft => { draft.points[0].y = newPosition.y });
     }
-    if (isTopOrBottomLine(prevSegment) && pointIndex === 0) {
+    if (isTopOrBottomLine(prevSegment.id) && pointIndex === 0) {
       updateSegment(prevSegment.id, draft => { draft.points[0].y = newPosition.y });
       updateSegment(prevPrevSegment.id, draft => { draft.points.at(-1).y = newPosition.y });
     }

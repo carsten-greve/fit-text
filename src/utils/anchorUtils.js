@@ -1,7 +1,9 @@
-export const isTopLeft = (anchor) => anchor.nextSegmentId === '1';
-export const isTopRight = (anchor) => anchor.prevSegmentId === '1';
-export const isBottomRight = (anchor) => anchor.nextSegmentId === '3';
-export const isBottomLeft = (anchor) => anchor.prevSegmentId === '3';
+import { topLineId, bottomLineId } from "./segmentUtils";
+
+export const isTopLeft = (anchor) => anchor.nextSegmentId === topLineId;
+export const isTopRight = (anchor) => anchor.prevSegmentId === topLineId;
+export const isBottomRight = (anchor) => anchor.nextSegmentId === bottomLineId;
+export const isBottomLeft = (anchor) => anchor.prevSegmentId === bottomLineId;
 export const isOnTopLine = (anchor) => isTopLeft(anchor) || isTopRight(anchor);
 export const isOnBottomLine = (anchor) => isBottomLeft(anchor) || isBottomRight(anchor);
 export const isOnTopOrBottomLine = (anchor) => isOnTopLine(anchor) || isOnBottomLine(anchor);

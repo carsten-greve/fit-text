@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useRef, useEffect, useMemo, useCallback } from 'react';
 import { produce } from 'immer';
 import { getAnchors } from './utils/anchorUtils';
+import { getSegments } from './utils/segmentUtils';
 
 const AppContext = createContext();
 
@@ -129,7 +130,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
   }, []);
 
   const segments = useMemo(() => {
-    return _segments.allIds.map(id => _segments.byId[id]);
+    return getSegments(_segments);
   }, [_segments]);
 
   const value = useMemo(() => {

@@ -8,7 +8,7 @@ import { FontDropbox } from './FontDropbox';
 
 export const FontSelection = () => {
   const {
-    segments,
+    _segments,
     sampleCount,
     fontSize,
     setFontSize,
@@ -29,7 +29,7 @@ export const FontSelection = () => {
     try {
       setIsAutoFitting(true);
 
-      const shapeBoundaries = getShapeBoundaries(segments, sampleCount);
+      const shapeBoundaries = getShapeBoundaries(_segments, sampleCount);
       const paragraphsOfWords = textToFit.split(/\n\s*\n/).map(p => p.split(/\s+/));
 
       let factor = 0.2;

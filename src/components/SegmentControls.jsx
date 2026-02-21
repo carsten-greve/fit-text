@@ -19,9 +19,9 @@ export const SegmentControls = () => {
   const isTension = selectedSegment && selectedSegment.type === 'tension';
   const canDelete =
     selectedSegment &&
-    !isTopOrBottomLine(selectedSegment) &&
-    !(isTopOrBottomLine(prevSegment) && isTopOrBottomLine(nextSegment));
-  const canSplit = selectedSegment && !isTopOrBottomLine(selectedSegment);
+    !isTopOrBottomLine(selectedSegment.id) &&
+    !(isTopOrBottomLine(prevSegment.id) && isTopOrBottomLine(nextSegment.id));
+  const canSplit = selectedSegment && !isTopOrBottomLine(selectedSegment.id);
 
   const handleTensionChange = (e) => {
     if (!selectedSegment) return;
@@ -79,7 +79,7 @@ export const SegmentControls = () => {
     updateSegment(selectedSegmentId, draft => {
       if (!draft ||
           draft.type === newSegmentType ||
-          isTopOrBottomLine(draft)) {
+          isTopOrBottomLine(draft.id)) {
         return;
       }
 
@@ -111,7 +111,7 @@ export const SegmentControls = () => {
   }
 
   const handleDeleteClick = () => {
-    if (isTopOrBottomLine(nextSegment)) {
+    if (isTopOrBottomLine(nextSegment.id)) {
       updateSegment(prevSegment.id, draft => {
         draft.points.splice(-1, 1, nextSegment.points[0]);
       });
@@ -140,7 +140,7 @@ export const SegmentControls = () => {
     selectedSegment
     ? isType
       ? activeButtonClass
-      : isTopOrBottomLine(selectedSegment)
+      : isTopOrBottomLine(selectedSegment.id)
         ? inactiveButtonClass
         : inactiveButtonHoverClass
     : inactiveButtonClass;

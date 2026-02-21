@@ -4,11 +4,20 @@ import { getShapeBoundaries } from '../utils/getShapeBoundaries';
 import { getTextLayout } from '../utils/getTextLayout';
 
 export const FittedText = () => {
-  const { segments, sampleCount, selectedFont, fontSize, lineSpacing, textToFit, paragraphIndent, isFirstLineIndent } = useApp();
+  const {
+    _segments,
+    sampleCount,
+    selectedFont,
+    fontSize,
+    lineSpacing,
+    textToFit,
+    paragraphIndent,
+    isFirstLineIndent
+  } = useApp();
 
-  if (segments.length === 0) return;
+  if (_segments.allIds.length === 0) return;
 
-  const shapeBoundaries = getShapeBoundaries(segments, sampleCount);
+  const shapeBoundaries = getShapeBoundaries(_segments, sampleCount);
   const paragraphsOfWords = textToFit.split(/\n\s*\n/).map(p => p.split(/\s+/));
   const { lines } = getTextLayout(paragraphsOfWords, lineSpacing, shapeBoundaries, selectedFont.name, fontSize, paragraphIndent, isFirstLineIndent);
 
