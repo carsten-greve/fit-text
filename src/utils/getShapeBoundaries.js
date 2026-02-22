@@ -32,7 +32,7 @@ const getPoints = (segments, location, sampleCount) => {
   return [...Array(1 + sampleCount).keys()].map(i => path.getPointAtLength(length * i / sampleCount));
 }
 
-const getX= (points, y) => {
+const getX = (points, y) => {
   let x = 0;
   const bs = binarySearch(points, y, p1 => p1.y - y);
   if (bs < 0) {

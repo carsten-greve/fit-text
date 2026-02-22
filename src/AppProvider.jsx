@@ -60,10 +60,42 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     const bottom = height - top;
     const right = width - left;
     setSegments([
-      { id: '1', nextSegmentId: '2', prevSegmentId: '4', type: 'line', location: 'top', points: [{x: left, y: top}, {x: right, y: top}] },
-      { id: '2', nextSegmentId: '3', prevSegmentId: '1', type: 'line', location: 'right', points: [{x: right, y: top}, {x: right, y: bottom}] },
-      { id: '3', nextSegmentId: '4', prevSegmentId: '2', type: 'line', location: 'bottom', points: [{x: right, y: bottom}, {x: left, y: bottom}] },
-      { id: '4', nextSegmentId: '1', prevSegmentId: '3', type: 'line', location: 'left', points: [{x: left, y: bottom}, {x: left, y: top}] },
+      {
+        id: '1',
+        nextSegmentId: '2',
+        prevSegmentId: '4',
+        type: 'line',
+        orientation: 'horizontal',
+        location: 'top',
+        points: [{x: left, y: top}, {x: right, y: top}]
+      },
+      {
+        id: '2',
+        nextSegmentId: '3',
+        prevSegmentId: '1',
+        type: 'line',
+        orientation: null,
+        location: 'right',
+        points: [{x: right, y: top}, {x: right, y: bottom}]
+      },
+      {
+        id: '3',
+        nextSegmentId: '4',
+        prevSegmentId: '2',
+        type: 'line',
+        orientation: 'horizontal',
+        location: 'bottom',
+        points: [{x: right, y: bottom}, {x: left, y: bottom}]
+      },
+      {
+        id: '4',
+        nextSegmentId: '1',
+        prevSegmentId: '3',
+        type: 'line',
+        orientation: null,
+        location: 'left',
+        points: [{x: left, y: bottom}, {x: left, y: top}]
+      },
     ]);
 
     window.addEventListener('resize', updateSize);
@@ -134,7 +166,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
   }, [_segments]);
 
   const value = useMemo(() => {
-    const computedAnchors = getAnchors(segments);
+    const { anchors: computedAnchors, segmentEndpointAnchors: computedSegmentEndpointAnchors } = getAnchors(segments);
     const computedEndPointAnchors = computedAnchors.filter(anchor => anchor.isEndPoint);
     computedEndPointAnchors.forEach((endPointAnchor, i) => {
       endPointAnchor.nextEndPointAnchor = computedEndPointAnchors[(i + 1) % computedEndPointAnchors.length];
@@ -153,6 +185,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
       updateSegment,
       anchors: computedAnchors,
       endPointAnchors: computedEndPointAnchors,
+      segmentEndpointAnchors: computedSegmentEndpointAnchors,
       imageUrl,
       setImageUrl,
       selectedSegmentId,

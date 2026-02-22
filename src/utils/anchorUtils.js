@@ -9,9 +9,10 @@ export const isOnBottomLine = (anchor) => isBottomLeft(anchor) || isBottomRight(
 export const isOnTopOrBottomLine = (anchor) => isOnTopLine(anchor) || isOnBottomLine(anchor);
 
 export const getAnchors = segments => {
+  const segmentEndpointAnchors = segments.reduce((acc, key) => ({ ...acc, [key.id]: [] }), {});
   let prevSegment = segments.at(-1);
 
-  return segments.flatMap(segment => {
+  const anchors = segments.flatMap(segment => {
     const newAnchorsInSegment = [{
       prevSegmentId: segment.prevSegmentId,
       nextSegmentId: segment.id,
@@ -29,8 +30,13 @@ export const getAnchors = segments => {
     }));
     prevSegment = segment;
 
+    segmentEndpointAnchors[newAnchorsInSegment[0].prevSegmentId].push(newAnchorsInSegment[0]);
+    segmentEndpointAnchors[newAnchorsInSegment[0].nextSegmentId].push(newAnchorsInSegment[0]);
+
     return newAnchorsInSegment;
   });
+
+  return { anchors, segmentEndpointAnchors };
 };
 
 export const getBoundaryAnchors = endPointAnchors => {
@@ -41,14 +47,16 @@ export const getBoundaryAnchors = endPointAnchors => {
     else if (isTopRight(anchor)) topRight = anchor;
     else if (isBottomRight(anchor)) bottomRight = anchor;
     else if (isBottomLeft(anchor)) bottomLeft = anchor;
-    else if (
-      (isTopLeft(anchor.nextEndPointAnchor) || isTopRight(anchor.prevEndPointAnchor)) &&
-      (!topMiddle || topMiddle.point.y > anchor.point.y)
-    ) topMiddle = anchor;
-    else if (
-      (isBottomLeft(anchor.prevEndPointAnchor) || isBottomRight(anchor.nextEndPointAnchor)) &&
-      (!bottomMiddle || bottomMiddle.point.y < anchor.point.y)
-    ) bottomMiddle = anchor;
+    else {
+      if (
+        (isTopLeft(anchor.nextEndPointAnchor) || isTopRight(anchor.prevEndPointAnchor)) &&
+        (!topMiddle || topMiddle.point.y > anchor.point.y)
+      ) topMiddle = anchor;
+      if (
+        (isBottomLeft(anchor.prevEndPointAnchor) || isBottomRight(anchor.nextEndPointAnchor)) &&
+        (!bottomMiddle || bottomMiddle.point.y < anchor.point.y)
+      ) bottomMiddle = anchor;
+    }
   }
 
   if (topMiddle === null) topMiddle = bottomLeft;

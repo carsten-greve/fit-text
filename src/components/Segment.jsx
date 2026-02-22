@@ -6,9 +6,15 @@ export const Segment = ({ segment }) => {
   const { selectedSegmentId, setSelectedSegmentId } = useApp();
   const [isHovered, setIsHover] = useState(false);
 
-  return (
+  const lineColor = ["top", "bottom"].includes(segment.location)
+    ? "green"
+    : ["horizontal", "vertical"].includes(segment.orientation)
+      ? "darkorange"
+      : "black";
+
+      return (
     <Line
-      stroke={["top", "bottom"].includes(segment.location) ? "green" : "black"}
+      stroke={lineColor}
       strokeWidth={selectedSegmentId === segment.id ? 4 : 2}
       points={segment.points.flatMap(p => [p.x, p.y])}
       bezier={segment.type === 'bezier'}
